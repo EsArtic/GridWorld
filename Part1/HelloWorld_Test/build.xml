@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<project name="javacHello" default="compile">
+	<property name="src.dir" value="src"/>
+	<property name="classes.dir" value="classes"/>
+	<property name="jar.dir" value="jar"/>
+	<property name="junit-report" value="junit_report"/>
+
+	<path id="master-classpath">
+		<fileset file="${jar.dir}/*.jar"/>
+		<pathelement path="${classes.dir}"/>
+	</path>
+
+	<target name="clean">
+		<delete dir="${classes.dir}"/>
+		<delete dir="${junit-report}"/>
+	</target>
+
+	<target name="compile" depends="clean">
+		<mkdir dir="${classes.dir}"/>
+		<javac srcdir="${src.dir}" destdir= "${classes.dir}" includeantruntime="on">
+			<classpath refid="master-classpath"/>
+		</javac>
+	</target>
+
+    <target name="run" depends="compile">
+    	<java classname="HelloWorld">
+    		<classpath>
+    			<pathelement path="${classes.dir}"/>
+    		</classpath>
+    	</java>
+    </target>
+
+	<target name="test" depends="compile" description="run junit test">    
+        <mkdir dir="${junit-report}"/>    
+        <junit printsummary="yes">    
+            <classpath refid="master-classpath"/>    
+            <formatter type="plain"/>    
+            <batchtest todir="${junit-report}">    
+                <fileset dir="${src.dir}">    
+                    <include name="*Test.java"/>    
+                </fileset>    
+                <formatter type="xml"/>  
+            </batchtest>    
+        </junit>    
+          
+        <junitreport todir="${junit-report}">  
+        <fileset dir="${junit-report}">  
+        <include name="TEST-*.xml"/>  
+        </fileset>  
+ 
+        <report format="noframes" todir="${junit-report}"/>  
+        </junitreport>        
+    </target>    
+</project>

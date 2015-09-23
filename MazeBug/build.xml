@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<project name="javacHello">
+	<property name="src.dir" value="src"/>
+	<property name="classes.dir" value="classes"/>
+	<property name="jar.dir" value="jar"/>
+
+	<path id="master-classpath">
+		<fileset file="${jar.dir}/*.jar"/>
+		<pathelement path="${classes.dir}"/>
+	</path>
+
+	<target name="clean">
+        <delete dir="${classes.dir}"/>
+	</target>
+
+	<target name="compile" depends="clean">
+        <mkdir dir="${classes.dir}"/>
+		<javac srcdir="${src.dir}" destdir= "${classes.dir}" includeantruntime="on">
+			<classpath refid="master-classpath"/>
+		</javac>
+	</target>
+
+    <target name="run" depends="compile">
+    	<java fork="true" classname="MazeBugRunner">
+    		<classpath refid="master-classpath"/>
+    	</java>
+    </target>
+  
+</project>
